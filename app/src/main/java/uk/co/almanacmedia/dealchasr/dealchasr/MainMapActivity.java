@@ -99,45 +99,49 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(position == 0){
-                    Intent intent = new Intent(MainMapActivity.this, MyVouchersActivity.class);
-                    MainMapActivity.this.startActivity(intent);
-                    ((Activity)MainMapActivity.this).finish();
-                }
-                if(position == 1){
-                    Intent intent = new Intent(MainMapActivity.this, MyInterestsActivity.class);
-                    MainMapActivity.this.startActivity(intent);
-                    ((Activity)MainMapActivity.this).finish();
-                }
-                if(position == 2){
-                    Intent intent = new Intent(MainMapActivity.this, WelcomeActivity.class);
-                    MainMapActivity.this.startActivity(intent);
-                    ((Activity)MainMapActivity.this).finish();
-                }
-                if(position == 3){
-                    final ProgressDialog PD = new ProgressDialog(MainMapActivity.this, R.style.CustomDialog);
-                    PD.setMessage("Logging Out...");
-                    PD.setCancelable(false);
-                    PD.show();
+                if(isNetworkAvailable()){
+                    if(position == 0){
+                        Intent intent = new Intent(MainMapActivity.this, MyVouchersActivity.class);
+                        MainMapActivity.this.startActivity(intent);
+                        ((Activity)MainMapActivity.this).finish();
+                    }
+                    if(position == 1){
+                        Intent intent = new Intent(MainMapActivity.this, MyInterestsActivity.class);
+                        MainMapActivity.this.startActivity(intent);
+                        ((Activity)MainMapActivity.this).finish();
+                    }
+                    if(position == 2){
+                        Intent intent = new Intent(MainMapActivity.this, WelcomeActivity.class);
+                        MainMapActivity.this.startActivity(intent);
+                        ((Activity)MainMapActivity.this).finish();
+                    }
+                    if(position == 3){
+                        final ProgressDialog PD = new ProgressDialog(MainMapActivity.this, R.style.CustomDialog);
+                        PD.setMessage("Logging Out...");
+                        PD.setCancelable(false);
+                        PD.show();
 
-                    SharedPreferences settings = MainMapActivity.this.getSharedPreferences(PREFS_NAME, 0);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.clear();
-                    editor.apply();
+                        SharedPreferences settings = MainMapActivity.this.getSharedPreferences(PREFS_NAME, 0);
+                        SharedPreferences.Editor editor = settings.edit();
+                        editor.clear();
+                        editor.apply();
 
-                    new Handler().postDelayed(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    PD.dismiss();
+                        new Handler().postDelayed(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        PD.dismiss();
 
-                                    Intent intent = new Intent(MainMapActivity.this, LoginActivity.class);
-                                    MainMapActivity.this.startActivity(intent);
-                                    ((Activity)MainMapActivity.this).finish();
-                                }
-                            },
-                            400
-                    );
+                                        Intent intent = new Intent(MainMapActivity.this, LoginActivity.class);
+                                        MainMapActivity.this.startActivity(intent);
+                                        ((Activity)MainMapActivity.this).finish();
+                                    }
+                                },
+                                400
+                        );
+                    }
+                } else {
+                    Toast.makeText(MainMapActivity.this, "Please check your internet connection.", Toast.LENGTH_LONG).show();
                 }
             }
         });

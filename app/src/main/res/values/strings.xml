@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">DealChasr</string>
+    <string name="lorem_ipsum">Hello World!</string>
+    <string name="slide2">I see you!</string>
+    <string name="app_title">DEALCHASR</string>
+
+    <string name="slide_text_one">WELCOME TO DEALSCHASR!\n\nREDEEM VOUCHERS AND SHOW INTERESTS IN\nLOCAL DEALS LIVE ON YOUR MOBILE</string>
+    <string name="slide_text_two">JUST LOOK ON THE MAP FOR LIVE DEALS AND EVENTS NEAR YOU</string>
+    <string name="slide_text_three">BROWSE AND REDEEM AVAILABLE VOUCHERS OR LET THE VENUES KNOW YOUR WILL BE THERE FOR SPECIAL OFFERS AND EVENTS</string>
+    <string name="slide_text_four">GET TO THE VENUE BEFORE YOUR VOUCHER EXPIRES, SHOW THE VOUCHER AND ENJOY YOUR DEAL!</string>
+    <string name="slide_text_five">NOW YOU ARE READY TO CHASE SOME DEALS!</string>
+</resources>

@@ -122,7 +122,8 @@ public class DoCreateAccount extends AsyncTask<Void, Void, String> {
                     context.startActivity(intent);
                     ((Activity)context).finish();
                 } else {
-                    error.setText("FAILED TO CREATE ACCOUNT. PLEASE TRY AGAIN");
+                    String message = data.getString("message");
+                    error.setText(message);
                 }
             } catch (JSONException e) {
                 Log.e("JSON Error", e.getMessage(), e);

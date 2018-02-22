@@ -19,6 +19,8 @@ import android.widget.ListView;
 
 import uk.co.almanacmedia.dealchasr.dealspotr.R;
 
+import static uk.co.almanacmedia.dealchasr.dealchasr.RecyclerAdapter.PREFS_NAME;
+
 public class MyInterestsActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -55,6 +57,11 @@ public class MyInterestsActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         overridePendingTransition(R.anim.slide_in, R.anim.empty);
+
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        final Integer userID = settings.getInt("userID", 0);
+
+        new DoGetMyInterests(MyInterestsActivity.this, userID, findViewById(android.R.id.content), recyclerView).execute();
     }
 
     private void addDrawerItems() {

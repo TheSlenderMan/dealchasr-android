@@ -2,8 +2,11 @@ package uk.co.almanacmedia.dealchasr.dealchasr;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Handler;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -183,8 +186,11 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
                 CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 13);
                 map.animateCamera(yourLocation);
 
-                new DoGetVenues(map, MainMapActivity.this).execute();
-
+                if(isNetworkAvailable()){
+                    new DoGetVenues(map, MainMapActivity.this).execute();
+                } else {
+                    Toast.makeText(this, "Please check your internet connection.", Toast.LENGTH_LONG).show();
+                }
             }
 
         }else{
@@ -237,7 +243,11 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
         if (mGoogleApiClient != null) {
             if (mGoogleApiClient.isConnected()) {
-                getMyLocation();
+                if(isNetworkAvailable()){
+                    getMyLocation();
+                } else {
+                    Toast.makeText(this, "Please check your internet connection.", Toast.LENGTH_LONG).show();
+                }
             }
         }
 
@@ -285,5 +295,11 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         ((Activity)MainMapActivity.this).finish();
 
         return true;
+    }
+
+    public boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

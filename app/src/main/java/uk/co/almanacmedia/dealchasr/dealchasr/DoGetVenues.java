@@ -161,7 +161,7 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
                                 new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount).execute();
                             }
                         } catch (IOException e){
-                            Log.e("CODER Error", e.getMessage(), e);
+                            new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount).execute();
                         }
                     }
                 } else {

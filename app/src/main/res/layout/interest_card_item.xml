@@ -11,9 +11,9 @@
     card_view:cardElevation="10dp">
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/my_list_title"
+        android:id="@+id/myd_list_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:fontFamily="sans-serif-condensed"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
@@ -21,10 +21,10 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/my_list_desc"
+        android:id="@+id/myd_list_desc"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="50dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:textAlignment="center"
@@ -32,23 +32,12 @@
         android:textSize="14sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/view_voucher"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="150dp"
-        android:backgroundTint="@color/colorWhite"
-        android:fontFamily="sans-serif-condensed"
-        android:textColor="@color/colorAccent"
-        android:textSize="18sp"
-        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/my_countdown"
+        android:id="@+id/myd_countdown"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:fontFamily="sans-serif-condensed"
         android:text=""
         android:textAlignment="center"

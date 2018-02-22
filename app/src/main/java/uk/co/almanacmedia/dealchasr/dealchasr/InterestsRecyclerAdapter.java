@@ -36,76 +36,53 @@ import uk.co.almanacmedia.dealchasr.dealspotr.R;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.view.View.INVISIBLE;
 
-public class VoucherRecyclerAdapter extends RecyclerView.Adapter<VoucherRecyclerAdapter.ViewHolder> {
-    ArrayList<VoucherRecyclerModel> list;
+public class InterestsRecyclerAdapter extends RecyclerView.Adapter<InterestsRecyclerAdapter.ViewHolder> {
+    ArrayList<InterestsRecyclerModel> list;
     Context context;
     public PopupWindow mPopupWindow;
     public static final String PREFS_NAME = "DealSpotr.Data";
-    VoucherRecyclerAdapter(Context context, ArrayList<VoucherRecyclerModel> list) {
+    InterestsRecyclerAdapter(Context context, ArrayList<InterestsRecyclerModel> list) {
         this.list = list;
         this.context = context;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.voucher_card_item, parent, false);
+                .inflate(R.layout.interest_card_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        VoucherRecyclerModel voucher = list.get(position);
+        InterestsRecyclerModel voucher = list.get(position);
         final String voucherName = voucher.getVoucherName();
         final String dealTitle;
         final Integer ID = voucher.getID();
         final String time = voucher.getTime();
         final String venueName = voucher.getVenueName();
-        final String voucherCount = voucher.getVoucherCount();
+        final Integer recurring = voucher.getRecurring();
 
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         final Integer userID = settings.getInt("userID", 0);
 
-        dealTitle = voucher.getVoucherName() + " " + voucher.getDealName() + "\n@ " + venueName;
+        holder.title.setTextColor(Color.BLUE);
+        dealTitle = voucher.getDealName();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 
         try{
-            Date mDate = sdf.parse(time);
-            String nDate = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.getDefault()).format(new Date());
-            Date nowDate = sdf.parse(nDate);
-            long nowMilli = nowDate.getTime();
-            long timeInMilliseconds = mDate.getTime();
-            long diff = timeInMilliseconds - nowMilli;
-
-            if(nowMilli > timeInMilliseconds){
-                holder.timer.setText("EXPIRED");
-                holder.viewButton.setEnabled(false);
-                holder.viewButton.setText("");
+            String dateString;
+            if(recurring == 1){
+                Date mDate = sdf.parse(time);
+                sdf = new SimpleDateFormat("EEE dd @ HH:mm");
+                dateString = "Every " + sdf.format(mDate);
             } else {
-                new CountDownTimer(diff, 1000){
-                    public void onTick(long millisUntilFinished)  {
-                        holder.timer.setText("DEAL ENDS: " + (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished)))+":"
-                                +(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished)))+":"
-                                +(TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)))+"");
-                    }
-
-                    public void onFinish(){
-
-                    }
-                }.start();
-
-                holder.viewButton.setText("VIEW VOUCHER");
-                holder.viewButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(context, ViewVoucherActivity.class);
-                        intent.putExtra("userID", (Integer) userID);
-                        intent.putExtra("voucherID", (Integer) ID);
-                        context.startActivity(intent);
-                        ((Activity)context).finish();
-                    }
-                });
+                Date mDate = sdf.parse(time);
+                sdf = new SimpleDateFormat("EEE dd @ HH:mm");
+                dateString = sdf.format(mDate);
             }
+
+            holder.timer.setText(dateString);
         } catch (ParseException e){
             e.printStackTrace();
         }
@@ -123,15 +100,13 @@ public class VoucherRecyclerAdapter extends RecyclerView.Adapter<VoucherRecycler
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView description;
-        public Button viewButton;
         public TextView timer;
 
         public ViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.my_list_title);
-            description = (TextView) view.findViewById(R.id.my_list_desc);
-            viewButton = (Button) view.findViewById(R.id.view_voucher);
-            timer = (TextView) view.findViewById(R.id.my_countdown);
+            title = (TextView) view.findViewById(R.id.myd_list_title);
+            description = (TextView) view.findViewById(R.id.myd_list_desc);
+            timer = (TextView) view.findViewById(R.id.myd_countdown);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

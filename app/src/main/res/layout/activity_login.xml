@@ -131,6 +131,7 @@
         android:text="Forgotten your password?"
         android:textColor="@color/colorWhite"
         android:textStyle="bold"
+        android:onClick="forgottenPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

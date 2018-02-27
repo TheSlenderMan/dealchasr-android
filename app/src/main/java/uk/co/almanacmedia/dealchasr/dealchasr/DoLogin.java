@@ -120,7 +120,7 @@ class DoLogin extends AsyncTask<Void, Void, String> {
                     context.startActivity(intent);
                     ((Activity)context).finish();
                 } else {
-                    error.setText("THE EMAIL ADDRESS DOES NOT EXIST");
+                    error.setText(json.getString("message"));
                 }
             } catch (JSONException e) {
                 Log.e("JSON Error", e.getMessage(), e);

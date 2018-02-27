@@ -71,7 +71,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         final Integer userID = settings.getInt("userID", 0);
 
         if(type == "VOUCHER"){
-            dealTitle = voucher.getVoucherName() + " " + voucher.getDealName();
+            dealTitle = voucher.getVoucherName() + " - " + voucher.getDealName();
             holder.voucherCount.setText(voucherCount);
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");

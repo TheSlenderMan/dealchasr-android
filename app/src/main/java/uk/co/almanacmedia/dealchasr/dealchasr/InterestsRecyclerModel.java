@@ -13,9 +13,10 @@ public class InterestsRecyclerModel {
     private String venName;
     private Integer rec;
     private Integer ID;
+    private Integer daily;
 
     public InterestsRecyclerModel(Integer ID, String voucherName, String dealName, String dealDesc,
-                                String venueName, String dealDate, Integer recurring) {
+                                String venueName, String dealDate, Integer recurring, Integer daily) {
         this.vName = voucherName;
         this.dName = dealName;
         this.vDesc = dealDesc;
@@ -23,6 +24,7 @@ public class InterestsRecyclerModel {
         this.venName = venueName;
         this.rec = recurring;
         this.ID = ID;
+        this.daily = daily;
     }
     public String getDealName() {
         return dName;
@@ -78,5 +80,12 @@ public class InterestsRecyclerModel {
     }
     public void setID(Integer ID) {
         ID = ID;
+    }
+
+    public Integer getDaily() {
+        return daily;
+    }
+    public void setDaily(Integer daily) {
+        daily = daily;
     }
 }

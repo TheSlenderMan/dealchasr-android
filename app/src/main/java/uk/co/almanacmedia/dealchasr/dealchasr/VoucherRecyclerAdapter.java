@@ -65,7 +65,7 @@ public class VoucherRecyclerAdapter extends RecyclerView.Adapter<VoucherRecycler
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         final Integer userID = settings.getInt("userID", 0);
 
-        dealTitle = voucher.getVoucherName() + " " + voucher.getDealName() + "\n@ " + venueName;
+        dealTitle = voucher.getVoucherName() + " - " + voucher.getDealName() + "\n@ " + venueName;
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 

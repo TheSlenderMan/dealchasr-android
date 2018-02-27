@@ -113,8 +113,9 @@ public class DoGetMyInterests extends AsyncTask<Void,Void,String> {
                     String dealDate = jo.getString("dealDate");
                     Integer recurring = jo.getInt("recurring");
                     String venueName = jo.getString("vName");
+                    Integer daily = jo.getInt("daily");
 
-                    voucherList.add(new InterestsRecyclerModel(dealID, voucherName, dealName, dealDescription, venueName, dealDate, recurring));
+                    voucherList.add(new InterestsRecyclerModel(dealID, voucherName, dealName, dealDescription, venueName, dealDate, recurring, daily));
                 }
 
 

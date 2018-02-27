@@ -61,6 +61,7 @@ public class InterestsRecyclerAdapter extends RecyclerView.Adapter<InterestsRecy
         final String time = voucher.getTime();
         final String venueName = voucher.getVenueName();
         final Integer recurring = voucher.getRecurring();
+        final Integer daily = voucher.getDaily();
 
         SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
         final Integer userID = settings.getInt("userID", 0);
@@ -73,9 +74,19 @@ public class InterestsRecyclerAdapter extends RecyclerView.Adapter<InterestsRecy
         try{
             String dateString;
             if(recurring == 1){
+                if(daily == 1){
+                    Date mDate = sdf.parse(time);
+                    sdf = new SimpleDateFormat(" @ HH:mm");
+                    dateString = "Every Day" + sdf.format(mDate);
+                } else {
+                    Date mDate = sdf.parse(time);
+                    sdf = new SimpleDateFormat("EEE dd @ HH:mm");
+                    dateString = "Every " + sdf.format(mDate);
+                }
+            } else if(daily == 1){
                 Date mDate = sdf.parse(time);
-                sdf = new SimpleDateFormat("EEE dd @ HH:mm");
-                dateString = "Every " + sdf.format(mDate);
+                sdf = new SimpleDateFormat(" @ HH:mm");
+                dateString = "Every Day" + sdf.format(mDate);
             } else {
                 Date mDate = sdf.parse(time);
                 sdf = new SimpleDateFormat("EEE dd @ HH:mm");

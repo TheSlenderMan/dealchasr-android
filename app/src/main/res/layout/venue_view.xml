@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/colorWhite" />
+        app:srcCompat="@drawable/nopicture" />
 
     <Button
         android:id="@+id/button2"

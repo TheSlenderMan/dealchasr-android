@@ -18,9 +18,10 @@ public class RecyclerModel {
     private Integer venID;
     private Boolean status;
     private String vCount;
+    private Integer daily;
 
     public RecyclerModel(String voucherName, String dealName, String dealDesc, String type, Integer ID, String time, Integer rec,
-                         String venueName, String venWeb, Integer venID, Boolean status, String voucherCount) {
+                         String venueName, String venWeb, Integer venID, Boolean status, String voucherCount, Integer daily) {
         this.vName = voucherName;
         this.dName = dealName;
         this.vDesc = dealDesc;
@@ -33,6 +34,7 @@ public class RecyclerModel {
         this.venID = venID;
         this.status = status;
         this.vCount = voucherCount;
+        this.daily = daily;
     }
     public String getDealName() {
         return dName;
@@ -116,5 +118,12 @@ public class RecyclerModel {
     }
     public void setVoucherCount(String vCount) {
         vCount = vCount;
+    }
+
+    public Integer getDaily() {
+        return daily;
+    }
+    public void setDaily(Integer daily) {
+        daily = daily;
     }
 }

@@ -128,7 +128,7 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
                     int dcount = deals.length();
                     if(count == 0 && dcount == 0){
                         voucherList.add(new RecyclerModel("NO DEALS", "AVAILABLE", "Please check back regularly so you don't miss out!", "EMPTY", 0,
-                                "0", 0, venueName, venueWeb, venueID, false, "0"));
+                                "0", 0, venueName, venueWeb, venueID, false, "0", 0));
                     } else {
                         if(count > 0){
                             for (int i = 0; i < count; i++) {
@@ -148,7 +148,7 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
                                 }
                                 String type = "VOUCHER";
                                 voucherList.add(new RecyclerModel(voucherName, dealName, dealDescription, type, voucherID, voucherTime, 0, venueName
-                                , venueWeb, venueID, sStatus, voucherCount));
+                                , venueWeb, venueID, sStatus, voucherCount, 0));
                             }
                         }
                         if(dcount > 0){
@@ -161,6 +161,7 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
                                 String dealDate = jsonObject2.getString("dealDate");
                                 Integer recurring = jsonObject2.getInt("recurring");
                                 JSONArray status = jsonObject2.getJSONArray("status");
+                                Integer daily = jsonObject2.getInt("daily");
                                 Boolean sStatus;
                                 if(status.length() > 0){
                                     sStatus = true;
@@ -169,7 +170,7 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
                                 }
                                 String type = "DEAL";
                                 voucherList.add(new RecyclerModel(voucherName, dealName, dealDescription, type, dealID, dealDate, recurring, venueName,
-                                        venueWeb, venueID, sStatus, "0"));
+                                        venueWeb, venueID, sStatus, "0", daily));
                             }
                         }
                     }

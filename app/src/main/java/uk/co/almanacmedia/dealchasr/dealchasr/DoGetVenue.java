@@ -1,14 +1,21 @@
 package uk.co.almanacmedia.dealchasr.dealchasr;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -113,6 +120,8 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
                     String venueName  = venue.getString("vName");
                     String venueDesc  = venue.getString("vDescription");
                     String venueWeb   = venue.getString("vWebsite");
+                    final String venueContact = venue.getString("vContact");
+                    String venueOpen  = venue.getString("vOpenHours");
                     String addressOne = venue.getString("vAddressOne");
                     String addressTwo = venue.getString("vAddressTwo");
                     String cityTown   = venue.getString("vCityTown");
@@ -182,9 +191,21 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
 
                     TextView venueTitleView = v.findViewById(R.id.venueTitleView);
                     TextView venueDescView = v.findViewById(R.id.venueDescView);
+                    TextView venueOpenView = v.findViewById(R.id.openHours);
+                    Button venueCallButton = v.findViewById(R.id.callButton);
 
                     venueTitleView.setText(venueName.toUpperCase());
                     venueDescView.setText(venueDesc.toUpperCase());
+                    venueOpenView.setText(venueOpen.toUpperCase());
+
+                    venueCallButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                            callIntent.setData(Uri.parse("tel:" + venueContact));
+                            context.startActivity(callIntent);
+                        }
+                    });
 
                     RecyclerAdapter recyclerAdapter = new RecyclerAdapter(context, voucherList);
                     recyclerView.setAdapter(recyclerAdapter);

@@ -17,7 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 import static uk.co.almanacmedia.dealchasr.dealchasr.RecyclerAdapter.PREFS_NAME;
 

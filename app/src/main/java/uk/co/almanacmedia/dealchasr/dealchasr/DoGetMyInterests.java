@@ -20,7 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 /**
  * Created by Sam on 23/02/2018.

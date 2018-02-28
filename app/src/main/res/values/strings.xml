@@ -9,4 +9,6 @@
     <string name="slide_text_three">BROWSE AND REDEEM AVAILABLE VOUCHERS OR LET THE VENUES KNOW YOUR WILL BE THERE FOR SPECIAL OFFERS AND EVENTS</string>
     <string name="slide_text_four">GET TO THE VENUE BEFORE YOUR VOUCHER EXPIRES, SHOW THE VOUCHER AND ENJOY YOUR DEAL!</string>
     <string name="slide_text_five">NOW YOU ARE READY TO CHASE SOME DEALS!</string>
-</resources>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+
+    <string name="default_notification_channel_name" translatable="true">News</string></resources>

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 public class NewAccountActivity extends Activity {
 

@@ -27,7 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 /**
  * Created by Sam on 17/02/2018.

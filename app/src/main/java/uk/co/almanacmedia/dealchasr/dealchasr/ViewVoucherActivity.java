@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 public class ViewVoucherActivity extends AppCompatActivity {
 

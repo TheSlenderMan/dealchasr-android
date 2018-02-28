@@ -13,7 +13,7 @@ import android.support.v4.view.ViewPager;
 
 import android.view.View;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 import static uk.co.almanacmedia.dealchasr.dealchasr.DoDeviceTouch.PREFS_NAME;
 

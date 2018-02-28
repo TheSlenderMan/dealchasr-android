@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import org.json.JSONObject;
 import org.json.JSONException;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 
 /**

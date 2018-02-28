@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.lang.String;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 
 public class LoginActivity extends Activity {

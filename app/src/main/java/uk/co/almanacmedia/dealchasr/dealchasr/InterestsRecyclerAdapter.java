@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import uk.co.almanacmedia.dealchasr.dealspotr.R;
+import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.view.View.INVISIBLE;

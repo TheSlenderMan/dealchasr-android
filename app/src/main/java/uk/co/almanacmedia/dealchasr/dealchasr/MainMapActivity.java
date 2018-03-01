@@ -5,6 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Handler;
@@ -57,6 +59,9 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     public static final String PREFS_NAME = "DealSpotr.Data";
 
+    private Bitmap smallMarker;
+    private Bitmap smallMarker1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +94,21 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
         lv = findViewById(R.id.left_drawer);
         addDrawerItems();
+
+        Integer height = 150;
+        Integer width = 145;
+        BitmapDrawable bitmapDraw;
+        BitmapDrawable bitmapDraw1;
+        Bitmap b;
+        Bitmap b1;
+
+        bitmapDraw = (BitmapDrawable) getResources().getDrawable(R.drawable.mappin);
+        b = bitmapDraw.getBitmap();
+        smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+
+        bitmapDraw1 = (BitmapDrawable) getResources().getDrawable(R.drawable.mappinnone);
+        b1 = bitmapDraw1.getBitmap();
+        smallMarker1 = Bitmap.createScaledBitmap(b1, width, height, false);
 
     }
 
@@ -188,10 +208,10 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
                 LatLng coordinate = new LatLng(latitude, longitude);
                 CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, 13);
-                map.animateCamera(yourLocation);
+                map.moveCamera(yourLocation);
 
                 if(isNetworkAvailable()){
-                    new DoGetVenues(map, MainMapActivity.this).execute();
+                    new DoGetVenues(map, MainMapActivity.this, smallMarker, smallMarker1).execute();
                 } else {
                     Toast.makeText(this, "Please check your internet connection.", Toast.LENGTH_LONG).show();
                 }
@@ -202,6 +222,11 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
                     "mLastLocation == null",
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
     }
 
     @Override
@@ -265,7 +290,11 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     protected void onStop() {
+        map.clear();
+        System.gc();
         mGoogleApiClient.disconnect();
+        smallMarker.recycle();
+        smallMarker1.recycle();
         super.onStop();
     }
 

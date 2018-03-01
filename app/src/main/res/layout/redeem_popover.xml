@@ -95,5 +95,7 @@
         android:text="Terms and Conditions"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:paddingBottom="25dp"
+        android:textStyle="bold"
+        />
 </RelativeLayout>

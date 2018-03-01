@@ -40,10 +40,15 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
     public Context context;
     public GoogleMap map;
     public ProgressDialog PD;
+    private Bitmap smallMarker;
+    private Bitmap smallMarker1;
 
-    public DoGetVenues(GoogleMap map, Context context){
+    public DoGetVenues(GoogleMap map, Context context, Bitmap sm, Bitmap sm2){
         this.context=context;
         this.map = map;
+
+        this.smallMarker = sm;
+        this.smallMarker1 = sm2;
     }
 
     protected void onPreExecute() {
@@ -106,12 +111,6 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
                 if (found == 1) {
                     JSONArray array = data.getJSONArray("venues");
 
-                    Integer height = 0;
-                    Integer width = 0;
-                    BitmapDrawable bitmapDraw;
-                    Bitmap b;
-                    Bitmap smallMarker;
-
                     for (Integer i = 0; i < array.length(); i++){
                         JSONObject row = array.getJSONObject(i);
                         Integer venueID   = row.getInt("id");
@@ -142,18 +141,8 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
                                 thisMarker.setTag(venueID);
 
                                 if(vcount > 0 || dcount > 0){
-                                    height = 150;
-                                    width  = 145;
-                                    bitmapDraw = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappin);
-                                    b = bitmapDraw.getBitmap();
-                                    smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
                                     thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
                                 } else {
-                                    int height1 = 150;
-                                    int width1  = 145;
-                                    BitmapDrawable bitmapDraw1 = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappinnone);
-                                    Bitmap b1 = bitmapDraw1.getBitmap();
-                                    Bitmap smallMarker1 = Bitmap.createScaledBitmap(b1, width1, height1, false);
                                     thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker1));
                                 }
 

@@ -116,8 +116,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
                     TextView vPrice = redeemPopover.findViewById(R.id.voucherPrice);
                     TextView vNameView = redeemPopover.findViewById(R.id.venueName);
+                    TextView termsText = redeemPopover.findViewById(R.id.termsTextLink);
                     vPrice.setText(voucherName);
                     vNameView.setText("@ " + venueName);
+
+                    termsText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://dealchasr.co.uk/terms"));
+                            context.startActivity(browserIntent);
+                        }
+                    });
 
                     Button redeemNow = redeemPopover.findViewById(R.id.redeemNow);
                     redeemNow.setOnClickListener(new View.OnClickListener() {

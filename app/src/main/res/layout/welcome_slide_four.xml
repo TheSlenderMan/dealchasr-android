@@ -21,16 +21,16 @@
 
         <TextView
             android:id="@+id/textView5"
-            android:layout_width="wrap_content"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:fontFamily="sans-serif-condensed"
+            android:padding="10dp"
+            android:text="@string/slide_text_four"
             android:textAlignment="center"
             android:textColor="@color/colorWhite"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="@string/slide_text_four"
-            android:padding="10dp"/>
+            android:textStyle="bold" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

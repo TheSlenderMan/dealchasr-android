@@ -112,6 +112,11 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+    }
+
     private void addDrawerItems() {
         String[] osArray = { "MY VOUCHERS", "MY INTERESTS", "HOW TO USE DEALCHASR", "LOG OUT" };
         mAdapter = new ArrayAdapter<String>(this, R.layout.menu_item, osArray);
@@ -226,6 +231,8 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     protected void onDestroy(){
+        smallMarker.recycle();
+        smallMarker1.recycle();
         super.onDestroy();
     }
 
@@ -293,8 +300,6 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         map.clear();
         System.gc();
         mGoogleApiClient.disconnect();
-        smallMarker.recycle();
-        smallMarker1.recycle();
         super.onStop();
     }
 

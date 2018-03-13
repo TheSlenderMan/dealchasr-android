@@ -42,13 +42,15 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
     public ProgressDialog PD;
     private Bitmap smallMarker;
     private Bitmap smallMarker1;
+    private Bitmap proMarker;
 
-    public DoGetVenues(GoogleMap map, Context context, Bitmap sm, Bitmap sm2){
+    public DoGetVenues(GoogleMap map, Context context, Bitmap sm, Bitmap sm2, Bitmap prm){
         this.context=context;
         this.map = map;
 
         this.smallMarker = sm;
         this.smallMarker1 = sm2;
+        this.proMarker = prm;
     }
 
     protected void onPreExecute() {
@@ -123,6 +125,7 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
                         String postCode   = row.getString("vPostCode");
                         JSONArray vouchers= row.getJSONArray("vouchers");
                         JSONArray deals   = row.getJSONArray("deals");
+                        Integer tier      = row.getInt("tier");
 
                         Integer vcount = vouchers.length();
                         Integer dcount = deals.length();
@@ -140,17 +143,20 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
                                 .position(new LatLng(location.getLatitude(), location.getLongitude())));
                                 thisMarker.setTag(venueID);
 
-                                if(vcount > 0 || dcount > 0){
-                                    thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                if(vcount > 0 || dcount > 0 || tier == 3){
+                                    if(tier == 3){
+                                        thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(proMarker));
+                                    } else {
+                                        thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                    }
                                 } else {
                                     thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker1));
                                 }
-
                             } else {
-                                new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount).execute();
+                                new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount, tier).execute();
                             }
                         } catch (IOException e){
-                            new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount).execute();
+                            new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount, tier).execute();
                         }
                     }
                 } else {

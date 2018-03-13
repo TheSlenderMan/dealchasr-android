@@ -61,6 +61,7 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     private Bitmap smallMarker;
     private Bitmap smallMarker1;
+    private Bitmap smallMarker3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,10 +98,14 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
         Integer height = 150;
         Integer width = 145;
+        Integer height2 = 190;
+        Integer width2 = 185;
         BitmapDrawable bitmapDraw;
         BitmapDrawable bitmapDraw1;
+        BitmapDrawable bitmapDraw2;
         Bitmap b;
         Bitmap b1;
+        Bitmap b2;
 
         bitmapDraw = (BitmapDrawable) getResources().getDrawable(R.drawable.mappin);
         b = bitmapDraw.getBitmap();
@@ -109,6 +114,10 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         bitmapDraw1 = (BitmapDrawable) getResources().getDrawable(R.drawable.mappinnone);
         b1 = bitmapDraw1.getBitmap();
         smallMarker1 = Bitmap.createScaledBitmap(b1, width, height, false);
+
+        bitmapDraw2 = (BitmapDrawable) getResources().getDrawable(R.drawable.mappinpro);
+        b2 = bitmapDraw2.getBitmap();
+        smallMarker3 = Bitmap.createScaledBitmap(b2, width2, height2, false);
 
     }
 
@@ -216,7 +225,7 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
                 map.moveCamera(yourLocation);
 
                 if(isNetworkAvailable()){
-                    new DoGetVenues(map, MainMapActivity.this, smallMarker, smallMarker1).execute();
+                    new DoGetVenues(map, MainMapActivity.this, smallMarker, smallMarker1, smallMarker3).execute();
                 } else {
                     Toast.makeText(this, "Please check your internet connection.", Toast.LENGTH_LONG).show();
                 }
@@ -233,6 +242,7 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onDestroy(){
         smallMarker.recycle();
         smallMarker1.recycle();
+        smallMarker3.recycle();
         super.onDestroy();
     }
 

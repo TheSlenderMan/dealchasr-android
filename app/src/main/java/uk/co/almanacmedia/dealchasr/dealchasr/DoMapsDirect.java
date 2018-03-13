@@ -38,13 +38,15 @@ public class DoMapsDirect extends AsyncTask<Void, Void, String> {
     private Integer VID;
     private Integer vcount;
     private Integer dcount;
+    private Integer tier;
 
-    public DoMapsDirect(Context context, GoogleMap map, String address, Integer VID, Integer vcount, Integer dcount){
+    public DoMapsDirect(Context context, GoogleMap map, String address, Integer VID, Integer vcount, Integer dcount, Integer tier){
         this.context = context;
         this.map = map;
         this.VID = VID;
         this.vcount = vcount;
         this.dcount = dcount;
+        this.tier = tier;
         try {
             this.API_URL = "https://maps.google.com/maps/api/geocode/json?address="
                     + URLEncoder.encode(address, "UTF-8") + "&ka&sensor=false&key=AIzaSyAD_QULIBE7yuoBpqKDk2lKCc_d_ye-llY";
@@ -120,13 +122,23 @@ public class DoMapsDirect extends AsyncTask<Void, Void, String> {
             Bitmap b;
             Bitmap smallMarker;
 
-            if(vcount > 0 || dcount > 0){
-                int height = 150;
-                int width  = 145;
-                bitmapDraw = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappin);
-                b = bitmapDraw.getBitmap();
-                smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+            if(vcount > 0 || dcount > 0 || tier == 3){
+                if(tier == 3){
+                    int height = 190;
+                    int width  = 185;
+                    BitmapDrawable bitmapDraw2 = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappinpro);
+                    Bitmap b2 = bitmapDraw2.getBitmap();
+                    Bitmap smallMarker2 = Bitmap.createScaledBitmap(b2, width, height, false);
+                    thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker2));
+                } else {
+                    int height = 150;
+                    int width  = 145;
+                    bitmapDraw = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappin);
+                    b = bitmapDraw.getBitmap();
+                    smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                    thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                }
+
             } else {
                 int height1 = 150;
                 int width1  = 145;

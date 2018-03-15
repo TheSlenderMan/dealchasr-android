@@ -4,9 +4,9 @@
     <string name="slide2">I see you!</string>
     <string name="app_title">DEALCHASR</string>
 
-    <string name="slide_text_one">WELCOME TO DEALSCHASR!\n\nREDEEM VOUCHERS AND SHOW INTERESTS IN\nLOCAL DEALS LIVE ON YOUR MOBILE</string>
-    <string name="slide_text_two">JUST LOOK ON THE MAP FOR LIVE DEALS AND EVENTS NEAR YOU</string>
-    <string name="slide_text_three">BROWSE AND REDEEM AVAILABLE VOUCHERS OR LET THE VENUES KNOW YOUR WILL BE THERE FOR SPECIAL OFFERS AND EVENTS</string>
+    <string name="slide_text_one">WELCOME TO DEALSCHASR!\n\nFIND REAL TIME VOUCHERS AND DEALS AT YOUR LOCAL PUBS, BARS AND VENUES</string>
+    <string name="slide_text_two">LOOK ON THE MAP FOR YOUR FAVOURITE VENUES OR EVEN LOOK FOR SOMETHING NEW</string>
+    <string name="slide_text_three">CHOSEN YOUR VENUE AND THEY HAVE A VOUCHER? REDEEM IT THERE AND THEN</string>
     <string name="slide_text_four">GET TO THE VENUE BEFORE YOUR VOUCHER EXPIRES, SHOW THE VOUCHER AND ENJOY YOUR DEAL!</string>
     <string name="slide_text_five">NOW YOU ARE READY TO CHASE SOME DEALS!</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>

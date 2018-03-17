@@ -67,7 +67,7 @@ public class InterestsRecyclerAdapter extends RecyclerView.Adapter<InterestsRecy
         final Integer userID = settings.getInt("userID", 0);
 
         holder.title.setTextColor(Color.BLUE);
-        dealTitle = voucher.getDealName();
+        dealTitle = voucher.getDealName() + "\n@ " + venueName;
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 

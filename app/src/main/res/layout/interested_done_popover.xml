@@ -29,7 +29,7 @@
         android:layout_centerVertical="true"
         android:fontFamily="sans-serif-condensed"
         android:padding="25sp"
-        android:text="Visit the venues website below for more info or alternatively hit I'm Going to let them know you'll be there."
+        android:text="Visit the venues website below for more info or alternatively hit I'm Going to let them know you'll be there.\n\nYou can view your interests by tapping the menu then tap 'MY INTERESTS'"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="18sp"

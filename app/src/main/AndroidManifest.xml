@@ -57,9 +57,12 @@
         <activity
             android:name="uk.co.almanacmedia.dealchasr.dealchasr.VenueFragment"
             android:screenOrientation="portrait" />
-        <activity android:name="uk.co.almanacmedia.dealchasr.dealchasr.ViewVoucherActivity" />
-        <activity android:name="uk.co.almanacmedia.dealchasr.dealchasr.MyVouchersActivity" />
-        <activity android:name="uk.co.almanacmedia.dealchasr.dealchasr.MyInterestsActivity"></activity>
+        <activity android:name="uk.co.almanacmedia.dealchasr.dealchasr.ViewVoucherActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="uk.co.almanacmedia.dealchasr.dealchasr.MyVouchersActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="uk.co.almanacmedia.dealchasr.dealchasr.MyInterestsActivity"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".FCMService">

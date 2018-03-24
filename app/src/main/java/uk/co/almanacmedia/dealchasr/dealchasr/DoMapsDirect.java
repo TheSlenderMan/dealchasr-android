@@ -39,14 +39,16 @@ public class DoMapsDirect extends AsyncTask<Void, Void, String> {
     private Integer vcount;
     private Integer dcount;
     private Integer tier;
+    private String name;
 
-    public DoMapsDirect(Context context, GoogleMap map, String address, Integer VID, Integer vcount, Integer dcount, Integer tier){
+    public DoMapsDirect(Context context, GoogleMap map, String address, Integer VID, Integer vcount, Integer dcount, Integer tier, String name){
         this.context = context;
         this.map = map;
         this.VID = VID;
         this.vcount = vcount;
         this.dcount = dcount;
         this.tier = tier;
+        this.name = name;
         try {
             this.API_URL = "https://maps.google.com/maps/api/geocode/json?address="
                     + URLEncoder.encode(address, "UTF-8") + "&ka&sensor=false&key=AIzaSyAD_QULIBE7yuoBpqKDk2lKCc_d_ye-llY";
@@ -117,35 +119,37 @@ public class DoMapsDirect extends AsyncTask<Void, Void, String> {
             Marker thisMarker = this.map.addMarker(new MarkerOptions()
                     .position(new LatLng(lat, lng)));
             thisMarker.setTag(VID);
+            thisMarker.setTitle(this.name);
+            String snip = (vcount + dcount) + " Voucher(s) >";
+            thisMarker.setSnippet(snip);
 
             BitmapDrawable bitmapDraw;
             Bitmap b;
             Bitmap smallMarker;
 
-            if(vcount > 0 || dcount > 0 || tier == 3){
-                if(tier == 3){
-                    int height = 190;
-                    int width  = 185;
-                    BitmapDrawable bitmapDraw2 = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappinpro);
-                    Bitmap b2 = bitmapDraw2.getBitmap();
-                    Bitmap smallMarker2 = Bitmap.createScaledBitmap(b2, width, height, false);
-                    thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker2));
-                } else {
-                    int height = 150;
-                    int width  = 145;
-                    bitmapDraw = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappin);
-                    b = bitmapDraw.getBitmap();
-                    smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                    thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-                }
-
-            } else {
+            if((vcount > 0 || dcount > 0) && tier == 3){
+                int height = 150;
+                int width  = 145;
+                bitmapDraw = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappin);
+                b = bitmapDraw.getBitmap();
+                smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+            }
+            if(vcount < 1 && dcount < 1 && tier == 3){
                 int height1 = 150;
                 int width1  = 145;
                 BitmapDrawable bitmapDraw1 = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappinnone);
                 Bitmap b1 = bitmapDraw1.getBitmap();
                 Bitmap smallMarker1 = Bitmap.createScaledBitmap(b1, width1, height1, false);
                 thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker1));
+            }
+            if((vcount > 0 || dcount > 0) && tier == 2){
+                int height = 150;
+                int width  = 145;
+                bitmapDraw = (BitmapDrawable) context.getResources().getDrawable(R.drawable.mappin);
+                b = bitmapDraw.getBitmap();
+                smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
             }
 
         } catch (JSONException e) {

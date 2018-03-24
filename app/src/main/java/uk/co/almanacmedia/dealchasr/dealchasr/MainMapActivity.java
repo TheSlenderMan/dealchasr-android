@@ -43,7 +43,7 @@ import com.google.android.gms.location.LocationServices;
 
 import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
-public class MainMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks,
+public class MainMapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMyLocationButtonClickListener,
         GoogleMap.OnMyLocationClickListener, GoogleMap.OnMarkerClickListener {
 
@@ -285,6 +285,7 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
         this.map = map;
         this.map.setOnMarkerClickListener(this);
+        this.map.setOnInfoWindowClickListener(this);
 
 
         if (mGoogleApiClient != null) {
@@ -334,6 +335,21 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
+        /*Integer venueID = (Integer) marker.getTag();
+
+        Intent intent = new Intent(MainMapActivity.this, VenueFragment.class);
+        intent.putExtra("VID", (Integer) venueID);
+        intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+        MainMapActivity.this.startActivity(intent);
+        ((Activity)MainMapActivity.this).finish();*/
+
+
+
+        return false;
+    }
+
+    @Override
+    public void onInfoWindowClick(final Marker marker){
         Integer venueID = (Integer) marker.getTag();
 
         Intent intent = new Intent(MainMapActivity.this, VenueFragment.class);
@@ -341,8 +357,6 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
         MainMapActivity.this.startActivity(intent);
         ((Activity)MainMapActivity.this).finish();
-
-        return true;
     }
 
     public boolean isNetworkAvailable() {

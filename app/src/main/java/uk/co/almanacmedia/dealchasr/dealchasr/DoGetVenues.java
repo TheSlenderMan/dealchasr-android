@@ -142,21 +142,24 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
                                 Marker thisMarker = this.map.addMarker(new MarkerOptions()
                                 .position(new LatLng(location.getLatitude(), location.getLongitude())));
                                 thisMarker.setTag(venueID);
+                                thisMarker.setTitle(venueName);
+                                String snip = (vcount + dcount) + " Voucher(s) >";
+                                thisMarker.setSnippet(snip);
 
-                                if(vcount > 0 || dcount > 0 || tier == 3){
-                                    if(tier == 3){
-                                        thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(proMarker));
-                                    } else {
-                                        thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
-                                    }
-                                } else {
+                                if((vcount > 0 || dcount > 0) && tier == 3){
+                                    thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                }
+                                if(vcount < 1 && dcount < 1 && tier == 3){
                                     thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker1));
                                 }
+                                if((vcount > 0 || dcount > 0) && tier == 2){
+                                    thisMarker.setIcon(BitmapDescriptorFactory.fromBitmap(smallMarker));
+                                }
                             } else {
-                                new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount, tier).execute();
+                                new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount, tier, venueName).execute();
                             }
                         } catch (IOException e){
-                            new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount, tier).execute();
+                            new DoMapsDirect(context, map, fullAddress, venueID, vcount, dcount, tier, venueName).execute();
                         }
                     }
                 } else {

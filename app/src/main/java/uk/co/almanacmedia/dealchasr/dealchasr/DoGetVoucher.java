@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -132,6 +133,7 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
                         final TextView timeTillEnd = view.findViewById(R.id.timeTillEnd);
                         final TextView voucherTitle= view.findViewById(R.id.voucherVDetails);
                         final ImageView codeView = view.findViewById(R.id.codeHolder);
+                        final Button cmi = view.findViewById(R.id.cmi);
 
                         String titleText = "" + voucherName + " " + dealName + " @ " + venueName;
 
@@ -160,6 +162,13 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
                         } catch (WriterException e) {
                             e.printStackTrace();
                         }
+
+                        cmi.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                new DoNullifyVoucher(context, voucherID, userID, PD).execute();
+                            }
+                        });
 
                     } catch (ParseException e){
                         e.printStackTrace();

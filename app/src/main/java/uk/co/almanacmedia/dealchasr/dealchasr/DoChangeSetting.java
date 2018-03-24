@@ -1,52 +1,55 @@
 package uk.co.almanacmedia.dealchasr.dealchasr;
 
-import android.content.SharedPreferences;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.content.Context;
-import android.provider.Settings;
-import android.app.Activity;
-import android.content.Intent;
 import android.widget.Toast;
 
-import java.net.URL;
-import java.net.HttpURLConnection;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import org.json.JSONObject;
-import org.json.JSONException;
-
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
- * Created by Sam on 09/02/2018.
+ * Created by Sam on 24/03/2018.
  */
 
-class DoRegisterFCM extends AsyncTask<Void, Void, String> {
+public class DoChangeSetting extends AsyncTask<Void, Void, String> {
 
     private Exception exception;
-    private String API_URL = "http://api.almanacmedia.co.uk/notifications/register";
+    private String API_URL = "http://api.almanacmedia.co.uk/notifications/settings";
     private String authKey = "DS1k1Il68_uPPoD";
-    private Integer uid;
-    public  MainMapActivity context;
+    private Integer tog;
+    public  Context context;
     public static final String PREFS_NAME = "DealSpotr.Data";
-    public String nid;
+    public String type;
+    public Integer uid;
+    public ProgressDialog PD;
 
-    public DoRegisterFCM(MainMapActivity context, String nid, Integer uid){
+    public DoChangeSetting(Context context, String type, Integer tog, Integer uid){
         this.context = context;
+        this.tog = tog;
+        this.type = type;
         this.uid = uid;
-        this.nid = nid;
     }
 
     protected void onPreExecute() {
-
+        this.PD = new ProgressDialog(this.context, R.style.CustomDialog);
+        this.PD.setMessage("Saving...");
+        this.PD.setCancelable(false);
+        this.PD.show();
     }
 
     protected String doInBackground(Void... urls) {
 
         try {
 
-            String postParameters = "uid=" + uid + "&did=" + nid;
+            String postParameters = "tog=" + tog + "&type=" + type + "&uid=" + uid;
 
             URL url = new URL(API_URL);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -103,10 +106,9 @@ class DoRegisterFCM extends AsyncTask<Void, Void, String> {
         if(json != null){
             try {
                 if(json.getBoolean("FCM")){
-                    Log.i("FCM REGISTER", "Instance ID Registered Successfully.");
-                    context.setSettings(json.getInt("global"), json.getInt("favourite"));
+                    Log.i("FCM UPDATED", "FCM setting updated.");
                 } else {
-                    Log.i("FCM REGISTER", json.getString("FCM"));
+                    Log.i("FCM UPDATE", "Update failed.");
                 }
             } catch (JSONException e) {
                 Log.e("JSON Error", e.getMessage(), e);
@@ -114,5 +116,6 @@ class DoRegisterFCM extends AsyncTask<Void, Void, String> {
         } else {
             Log.i("Error", "Parsing device JSON");
         }
+        this.PD.dismiss();
     }
 }

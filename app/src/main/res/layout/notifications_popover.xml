@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_custom_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="2dp"
+    android:background="#FFF"
+    >
+
+    <Button
+        android:id="@+id/ib_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:backgroundTint="@color/cardview_light_background"
+        android:fontFamily="sans-serif-condensed"
+        android:text="X"
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/ib_close"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="55dp"
+        android:fontFamily="sans-serif-condensed"
+        android:text="GLOBAL NOTIFICATIONS"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ToggleButton
+        android:id="@+id/globalToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView6"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/cardview_light_background"
+        android:checked="true"
+        android:textColor="@color/colorAccent"
+        android:textOff="OFF"
+        android:textOn="ON"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/venueToggle"
+        android:layout_alignBottom="@+id/venueToggle"
+        android:layout_alignStart="@+id/textView6"
+        android:fontFamily="sans-serif-condensed"
+        android:text="VENUE NOTIFICATIONS"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ToggleButton
+        android:id="@+id/venueToggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/globalToggle"
+        android:layout_below="@+id/globalToggle"
+        android:layout_marginBottom="43dp"
+        android:layout_marginTop="43dp"
+        android:backgroundTint="@color/cardview_light_background"
+        android:textColor="@color/colorAccent"
+        android:textOff="OFF"
+        android:textOn="ON"
+        android:textStyle="bold" />
+
+</RelativeLayout>

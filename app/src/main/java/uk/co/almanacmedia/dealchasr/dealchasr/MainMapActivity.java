@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
@@ -16,19 +18,30 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.Manifest;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -55,6 +68,10 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
     static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    public PopupWindow mPopupWindow;
+    public Integer nGlobal = 1;
+    public Integer nFavourite = 1;
+    public Integer uid;
 
     private ArrayAdapter<String> mAdapter;
     private ListView lv;
@@ -124,8 +141,8 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         String nid = FirebaseInstanceId.getInstance().getToken();
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if(settings.contains("userID")){
-            Integer uid = settings.getInt("userID", 0);
-            new DoRegisterFCM(this, nid, uid).execute();
+            uid = settings.getInt("userID", 0);
+            new DoRegisterFCM(MainMapActivity.this, nid, uid).execute();
         } else {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
@@ -139,7 +156,7 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
     private void addDrawerItems() {
-        String[] osArray = { "MY VOUCHERS", "MY INTERESTS", "HOW TO USE DEALCHASR", "LOG OUT" };
+        String[] osArray = { "MY VOUCHERS", "MY INTERESTS", "NOTIFICATIONS", "HOW TO USE DEALCHASR", "LOG OUT" };
         mAdapter = new ArrayAdapter<String>(this, R.layout.menu_item, osArray);
         lv.setAdapter(mAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -157,11 +174,98 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
                         ((Activity)MainMapActivity.this).finish();
                     }
                     if(position == 2){
+
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+                        View nPopover = inflater.inflate(R.layout.notifications_popover,null);
+
+                        mPopupWindow = new PopupWindow(
+                                nPopover,
+                                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                                RelativeLayout.LayoutParams.WRAP_CONTENT
+                        );
+
+                        if(Build.VERSION.SDK_INT>=21){
+                            mPopupWindow.setElevation(5.0f);
+                        }
+
+                        Button closeButton = (Button) nPopover.findViewById(R.id.ib_close);
+                        ToggleButton globalToggle = (ToggleButton) nPopover.findViewById(R.id.globalToggle);
+                        ToggleButton favToggle = (ToggleButton) nPopover.findViewById(R.id.venueToggle);
+
+                        if(nGlobal == 1){
+                            globalToggle.setChecked(true);
+                        } else {
+                            globalToggle.setChecked(false);
+                        }
+
+                        if(nFavourite == 1) {
+                            favToggle.setChecked(true);
+                        } else {
+                            favToggle.setChecked(false);
+                        }
+
+                        closeButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mPopupWindow.dismiss();
+                            }
+                        });
+
+                        globalToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                Integer tog;
+                                if(b){
+                                    tog = 1;
+                                } else {
+                                    tog = 0;
+                                }
+                                new DoChangeSetting(MainMapActivity.this, "global", tog, uid).execute();
+                            }
+                        });
+
+                        favToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                                Integer tog;
+                                if(b){
+                                    tog = 1;
+                                } else {
+                                    tog = 0;
+                                }
+                                new DoChangeSetting(MainMapActivity.this, "favourite", tog, uid).execute();
+                            }
+                        });
+
+                        mPopupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
+
+                        View container;
+                        if (mPopupWindow.getBackground() == null) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                                container = (View) mPopupWindow.getContentView().getParent();
+                            } else {
+                                container = mPopupWindow.getContentView();
+                            }
+                        } else {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                container = (View) mPopupWindow.getContentView().getParent().getParent();
+                            } else {
+                                container = (View) mPopupWindow.getContentView().getParent();
+                            }
+                        }
+
+                        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+                        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+                        p.flags = WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        p.dimAmount = 0.8f;
+                        wm.updateViewLayout(container, p);
+                    }
+                    if(position == 3){
                         Intent intent = new Intent(MainMapActivity.this, WelcomeActivity.class);
                         MainMapActivity.this.startActivity(intent);
                         ((Activity)MainMapActivity.this).finish();
                     }
-                    if(position == 3){
+                    if(position == 4){
                         final ProgressDialog PD = new ProgressDialog(MainMapActivity.this, R.style.CustomDialog);
                         PD.setMessage("Logging Out...");
                         PD.setCancelable(false);
@@ -375,5 +479,11 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         ConnectivityManager connectivityManager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public void setSettings(Integer b, Integer f){
+        Log.i("settings", "-b " + b + " -f " + f);
+        nGlobal = b;
+        nFavourite = f;
     }
 }

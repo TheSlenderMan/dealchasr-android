@@ -1,9 +1,15 @@
 package uk.co.almanacmedia.dealchasr.dealchasr;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -125,6 +131,28 @@ public class DoRedeemVoucher extends AsyncTask<Void, Void, String> {
                 pop.dismiss();
 
                 if(data.getInt("created") == 1) {
+                    Intent intentv = new Intent(context, ViewVoucherActivity.class);
+                    intentv.putExtra("userID", (Integer) userID);
+                    intentv.putExtra("voucherID", (Integer) dealID);
+                    intentv.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intentv,
+                            PendingIntent.FLAG_ONE_SHOT);
+
+                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Notification.Builder notificationBuilder = new Notification.Builder(context)
+                            .setSmallIcon(R.drawable.dealspotrlogo)
+                            .setContentTitle("New Voucher Redeemed")
+                            .setContentText("View your voucher now!")
+                            .setAutoCancel(true)
+                            .setSound(defaultSoundUri)
+                            .setContentIntent(pendingIntent)
+                            .setColor(Color.parseColor("#F9A603"));
+
+                    NotificationManager notificationManager =
+                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+                    notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+
                     Intent intent = new Intent(context, ViewVoucherActivity.class);
                     intent.putExtra("userID", (Integer) userID);
                     intent.putExtra("voucherID", (Integer) dealID);

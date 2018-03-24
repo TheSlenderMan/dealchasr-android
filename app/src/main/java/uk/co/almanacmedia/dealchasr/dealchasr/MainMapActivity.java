@@ -40,6 +40,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import uk.co.almanacmedia.dealchasr.dealchasr.R;
 
@@ -119,6 +121,16 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
         b2 = bitmapDraw2.getBitmap();
         smallMarker3 = Bitmap.createScaledBitmap(b2, width2, height2, false);
 
+        String nid = FirebaseInstanceId.getInstance().getToken();
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if(settings.contains("userID")){
+            Integer uid = settings.getInt("userID", 0);
+            new DoRegisterFCM(this, nid, uid).execute();
+        } else {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            ((Activity)this).finish();
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@ class DoLogin extends AsyncTask<Void, Void, String> {
 
     private Exception exception;
     private String API_URL = "http://api.almanacmedia.co.uk/users/login";
-    private String authKey = "DS1k1Il68_uPPoD";
+    private String authKey = "DS1k1Il68_uPPoD:3";
     public  Context context;
     public  TextView error;
     public  String email;
@@ -54,9 +54,10 @@ class DoLogin extends AsyncTask<Void, Void, String> {
 
         try {
 
-            String postParameters = "email=" + this.email.toLowerCase() + "&password=" + this.password;
+            final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            final String token = settings.getString("apitoken", PREFS_NAME);
 
-            Log.i("INFO:", postParameters);
+            String postParameters = "email=" + this.email.toLowerCase() + "&password=" + this.password;
 
             URL url = new URL(API_URL);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -66,6 +67,9 @@ class DoLogin extends AsyncTask<Void, Void, String> {
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("DSToken", token);
+            urlConnection.setRequestProperty("DSUid", "LOGIN");
+            urlConnection.setRequestProperty("DSUtoken", "TOKEN");
 
             urlConnection.setFixedLengthStreamingMode(
                     postParameters.getBytes().length);
@@ -114,6 +118,7 @@ class DoLogin extends AsyncTask<Void, Void, String> {
                     SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putInt("userID", json.getInt("userID"));
+                    editor.putString("usertoken", json.getString("token"));
                     editor.apply();
 
                     Intent intent = new Intent(context, MainMapActivity.class);

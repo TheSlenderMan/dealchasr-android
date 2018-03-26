@@ -39,13 +39,14 @@ import uk.co.almanacmedia.dealchasr.dealchasr.R;
 public class DoGetVenue extends AsyncTask<Void, Void, String>{
     private Exception exception;
     private String API_URL = "http://api.almanacmedia.co.uk/venues/this";
-    private String authKey = "DS1k1Il68_uPPoD";
+    private String authKey = "DS1k1Il68_uPPoD:3";
     public Context context;
     public Integer VID;
     public ProgressDialog PD;
     public View v;
     private RecyclerView recyclerView;
     ArrayList<RecyclerModel> voucherList;
+    public static final String PREFS_NAME = "DealSpotr.Data";
 
     public DoGetVenue(Context context, Integer VID, View v, RecyclerView recyclerView){
         this.context  = context;
@@ -67,14 +68,19 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
 
         try {
 
-            SharedPreferences settings = context.getSharedPreferences(RecyclerAdapter.PREFS_NAME, 0);
-            final Integer userID = settings.getInt("userID", 0);
+            final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            final String token = settings.getString("apitoken", PREFS_NAME);
+            final String usertoken = settings.getString("usertoken", PREFS_NAME);
+            final Integer userid = settings.getInt("userID", 0);
 
-            URL url = new URL(API_URL + "?VID=" + this.VID + "&userID=" + userID);
+            URL url = new URL(API_URL + "?VID=" + this.VID + "&userID=" + userid);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setRequestProperty("Authorization", authKey);
             urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("DSToken", token);
+            urlConnection.setRequestProperty("DSUid", "" + userid);
+            urlConnection.setRequestProperty("DSUtoken", usertoken);
 
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

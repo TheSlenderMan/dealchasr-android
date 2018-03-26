@@ -27,7 +27,7 @@ import uk.co.almanacmedia.dealchasr.dealchasr.R;
 public class DoCreateAccount extends AsyncTask<Void, Void, String> {
     private Exception exception;
     private String API_URL = "http://api.almanacmedia.co.uk/users/create";
-    private String authKey = "DS1k1Il68_uPPoD";
+    private String authKey = "DS1k1Il68_uPPoD:3";
     public Context context;
     public TextView error;
     public  String name;
@@ -55,6 +55,9 @@ public class DoCreateAccount extends AsyncTask<Void, Void, String> {
 
         try {
 
+            final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            final String token = settings.getString("apitoken", PREFS_NAME);
+
             String postParameters = "fullName=" + this.name + "&email=" + this.email.toLowerCase() + "&password=" + this.password;
 
             Log.i("INFO:", postParameters);
@@ -67,6 +70,9 @@ public class DoCreateAccount extends AsyncTask<Void, Void, String> {
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("DSToken", token);
+            urlConnection.setRequestProperty("DSUid", "LOGIN");
+            urlConnection.setRequestProperty("DSUtoken", "TOKEN");
 
             urlConnection.setFixedLengthStreamingMode(
                     postParameters.getBytes().length);

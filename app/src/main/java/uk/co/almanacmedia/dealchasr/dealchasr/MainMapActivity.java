@@ -273,7 +273,8 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
 
                         SharedPreferences settings = MainMapActivity.this.getSharedPreferences(PREFS_NAME, 0);
                         SharedPreferences.Editor editor = settings.edit();
-                        editor.clear();
+                        editor.remove("userID");
+                        editor.remove("usertoken");
                         editor.apply();
 
                         new Handler().postDelayed(

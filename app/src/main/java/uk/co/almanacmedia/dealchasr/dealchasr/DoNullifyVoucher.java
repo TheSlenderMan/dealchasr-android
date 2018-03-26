@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -41,8 +42,9 @@ public class DoNullifyVoucher extends AsyncTask<Void, Void, String> {
     private Integer voucherID;
     private Context context;
     private String API_URL = "http://api.almanacmedia.co.uk/vouchers/nullify";
-    private String authKey = "DS1k1Il68_uPPoD";
+    private String authKey = "DS1k1Il68_uPPoD:3";
     private ProgressDialog PD;
+    public static final String PREFS_NAME = "DealSpotr.Data";
 
     public DoNullifyVoucher(Context context, Integer voucherID, Integer userID, ProgressDialog PD){
         this.context = context;
@@ -60,6 +62,11 @@ public class DoNullifyVoucher extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... urls){
         try {
 
+            final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            final String token = settings.getString("apitoken", PREFS_NAME);
+            final String usertoken = settings.getString("usertoken", PREFS_NAME);
+            final Integer userid = settings.getInt("userID", 0);
+
             String postParameters = "userID=" + userID + "&voucherID=" + voucherID;
 
             URL url = new URL(API_URL);
@@ -70,6 +77,9 @@ public class DoNullifyVoucher extends AsyncTask<Void, Void, String> {
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("DSToken", token);
+            urlConnection.setRequestProperty("DSUid", "" + userid);
+            urlConnection.setRequestProperty("DSUtoken", usertoken);
 
             urlConnection.setFixedLengthStreamingMode(
                     postParameters.getBytes().length);

@@ -2,6 +2,7 @@ package uk.co.almanacmedia.dealchasr.dealchasr;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -24,6 +25,7 @@ import uk.co.almanacmedia.dealchasr.dealchasr.R;
 public class MainActivity extends Activity {
 
     Context context;
+    public static final String PREFS_NAME = "DealSpotr.Data";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +34,17 @@ public class MainActivity extends Activity {
 
         startFadeInAnimation();
 
+        final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
         if(isNetworkAvailable()){
             new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
-                    new DoDeviceTouch(MainActivity.this).execute();
+                    if(settings.contains("apitoken")){
+                        new DoDeviceTouch(MainActivity.this).execute();
+                    } else {
+                        new DoGetAPIToken(MainActivity.this).execute();
+                    }
                 }
             }, 6000);
         } else {

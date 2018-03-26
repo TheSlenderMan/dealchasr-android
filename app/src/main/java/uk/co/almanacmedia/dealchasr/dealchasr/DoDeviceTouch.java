@@ -26,7 +26,7 @@ class DoDeviceTouch extends AsyncTask<Void, Void, String> {
 
     private Exception exception;
     private String API_URL = "http://api.almanacmedia.co.uk/device/touch";
-    private String authKey = "DS1k1Il68_uPPoD";
+    private String authKey = "DS1k1Il68_uPPoD:3";
     private String uuid;
     public  Context context;
     public static final String PREFS_NAME = "DealSpotr.Data";
@@ -44,6 +44,8 @@ class DoDeviceTouch extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... urls) {
 
         try {
+            final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            final String token = settings.getString("apitoken", PREFS_NAME);
 
             String postParameters = "deviceID=" + uuid;
 
@@ -53,8 +55,10 @@ class DoDeviceTouch extends AsyncTask<Void, Void, String> {
             urlConnection.setRequestProperty("Authorization", authKey);
             urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            urlConnection.setRequestProperty("DSToken", token);
+            urlConnection.setRequestProperty("DSUid", "LOGIN");
+            urlConnection.setRequestProperty("DSUtoken", "TOKEN");
 
             urlConnection.setFixedLengthStreamingMode(
                     postParameters.getBytes().length);

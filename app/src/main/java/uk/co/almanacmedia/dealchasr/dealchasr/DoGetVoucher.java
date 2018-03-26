@@ -2,6 +2,7 @@ package uk.co.almanacmedia.dealchasr.dealchasr;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -44,9 +45,10 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
     private Context context;
     private Exception exception;
     private String API_URL = "http://api.almanacmedia.co.uk/vouchers/view";
-    private String authKey = "DS1k1Il68_uPPoD";
+    private String authKey = "DS1k1Il68_uPPoD:3";
     private ProgressDialog PD;
     private View view;
+    public static final String PREFS_NAME = "DealSpotr.Data";
 
     public DoGetVoucher(Context context, Integer userID, Integer voucherID, View view){
         this.context = context;
@@ -65,11 +67,19 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... urls){
         try {
 
+            final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+            final String token = settings.getString("apitoken", PREFS_NAME);
+            final String usertoken = settings.getString("usertoken", PREFS_NAME);
+            final Integer userid = settings.getInt("userID", 0);
+
             URL url = new URL(API_URL + "?userID=" + userID + "&voucherID=" + voucherID);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setRequestProperty("Authorization", authKey);
             urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("DSToken", token);
+            urlConnection.setRequestProperty("DSUid", "" + userid);
+            urlConnection.setRequestProperty("DSUtoken", usertoken);
 
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));

@@ -22,20 +22,17 @@ import org.json.JSONException;
  * Created by Sam on 09/02/2018.
  */
 
-class DoRegisterFCM extends AsyncTask<Void, Void, String> {
+class DoGetAPIToken extends AsyncTask<Void, Void, String> {
 
     private Exception exception;
-    private String API_URL = "http://api.almanacmedia.co.uk/notifications/register";
+    private String API_URL = "http://api.almanacmedia.co.uk/tokens/api";
     private String authKey = "DS1k1Il68_uPPoD:3";
-    private Integer uid;
-    public  MainMapActivity context;
+    private String uuid;
+    public  Context context;
     public static final String PREFS_NAME = "DealSpotr.Data";
-    public String nid;
 
-    public DoRegisterFCM(MainMapActivity context, String nid, Integer uid){
-        this.context = context;
-        this.uid = uid;
-        this.nid = nid;
+    public DoGetAPIToken(Context context){
+        this.context=context;
     }
 
     protected void onPreExecute() {
@@ -45,32 +42,14 @@ class DoRegisterFCM extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... urls) {
 
         try {
-
-            final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
-            final String token = settings.getString("apitoken", PREFS_NAME);
-            final String usertoken = settings.getString("usertoken", PREFS_NAME);
-            final Integer userid = settings.getInt("userID", 0);
-
-            String postParameters = "uid=" + uid + "&did=" + nid;
-
-            URL url = new URL(API_URL);
+            URL url = new URL(API_URL + "?client=3");
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setRequestProperty("Authorization", authKey);
-            urlConnection.setDoOutput(true);
-            urlConnection.setRequestMethod("POST");
-            urlConnection.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-            urlConnection.setRequestProperty("DSToken", token);
-            urlConnection.setRequestProperty("DSUid", "" + userid);
-            urlConnection.setRequestProperty("DSUtoken", usertoken);
-
-            urlConnection.setFixedLengthStreamingMode(
-                    postParameters.getBytes().length);
-
-            PrintWriter out = new PrintWriter(urlConnection.getOutputStream());
-            out.print(postParameters);
-            out.close();
+            urlConnection.setRequestProperty("DSToken", "GAIN");
+            urlConnection.setRequestProperty("DSUid", "LOGIN");
+            urlConnection.setRequestProperty("DSUToken", "TOKEN");
+            urlConnection.setRequestMethod("GET");
 
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -110,12 +89,13 @@ class DoRegisterFCM extends AsyncTask<Void, Void, String> {
     private void parseDeviceJSON(JSONObject json){
         if(json != null){
             try {
-                if(json.getBoolean("FCM")){
-                    Log.i("FCM REGISTER", "Instance ID Registered Successfully.");
-                    context.setSettings(json.getInt("global"), json.getInt("favourite"));
-                } else {
-                    Log.i("FCM REGISTER", json.getString("FCM"));
-                }
+                String token = json.getString("token");
+                SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString("apitoken", token);
+                editor.apply();
+
+                new DoDeviceTouch(context).execute();
             } catch (JSONException e) {
                 Log.e("JSON Error", e.getMessage(), e);
             }

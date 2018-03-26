@@ -70,4 +70,11 @@ public class WelcomeActivity extends FragmentActivity {
             ((Activity)WelcomeActivity.this).finish();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        WelcomeActivity.this.startActivity(intent);
+        ((Activity)WelcomeActivity.this).finish();
+    }
 }

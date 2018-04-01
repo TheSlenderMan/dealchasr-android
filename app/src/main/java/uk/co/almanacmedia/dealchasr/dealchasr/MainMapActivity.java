@@ -323,6 +323,7 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
             this.map.setOnMyLocationButtonClickListener(this);
             this.map.setOnMyLocationClickListener(this);
             this.map.setPadding(0, 150, 0, 0);
+            this.map.getUiSettings().setMapToolbarEnabled(false);
 
             LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             Criteria criteria = new Criteria();

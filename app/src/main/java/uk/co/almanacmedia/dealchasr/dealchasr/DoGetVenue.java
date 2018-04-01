@@ -42,17 +42,21 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
     private String authKey = "DS1k1Il68_uPPoD:3";
     public Context context;
     public Integer VID;
+    private Double vlat;
+    private Double vlong;
     public ProgressDialog PD;
     public View v;
     private RecyclerView recyclerView;
     ArrayList<RecyclerModel> voucherList;
     public static final String PREFS_NAME = "DealSpotr.Data";
 
-    public DoGetVenue(Context context, Integer VID, View v, RecyclerView recyclerView){
+    public DoGetVenue(Context context, Integer VID, View v, RecyclerView recyclerView, Double vlat, Double vlong){
         this.context  = context;
         this.VID = VID;
         this.v = v;
         this.recyclerView = recyclerView;
+        this.vlat = vlat;
+        this.vlong = vlong;
     }
 
     protected void onPreExecute() {
@@ -213,7 +217,7 @@ public class DoGetVenue extends AsyncTask<Void, Void, String>{
                         }
                     });
 
-                    RecyclerAdapter recyclerAdapter = new RecyclerAdapter(context, voucherList);
+                    RecyclerAdapter recyclerAdapter = new RecyclerAdapter(context, voucherList, vlat, vlong);
                     recyclerView.setAdapter(recyclerAdapter);
 
                 } else {

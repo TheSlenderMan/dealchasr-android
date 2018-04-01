@@ -1,12 +1,20 @@
 package uk.co.almanacmedia.dealchasr.dealchasr;
 
+import android.*;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.CountDownTimer;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -33,6 +44,9 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import uk.co.almanacmedia.dealchasr.dealchasr.R;
+
+import static android.content.Context.LOCATION_SERVICE;
+import static uk.co.almanacmedia.dealchasr.dealchasr.MainMapActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
 /**
  * Created by Sam on 21/02/2018.
@@ -130,6 +144,15 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
                     String dealName = v.getString("dealName");
                     String venueName= v.getString("vName");
                     String venueWebsite = v.getString("vWebsite");
+                    final Double vlat = v.getDouble("vlat");
+                    final Double vlong = v.getDouble("vlong");
+                    final String redeemed = v.getString("redeemed");
+                    final Integer used = v.getInt("used");
+                    final long difference = v.getLong("difference");
+
+                    Log.d("DIFF: ", ":" + difference);
+
+                    final CountDownTimer c;
 
                     try {
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
@@ -144,27 +167,24 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
                         final TextView voucherTitle= view.findViewById(R.id.voucherVDetails);
                         final ImageView codeView = view.findViewById(R.id.codeHolder);
                         final Button cmi = view.findViewById(R.id.cmi);
+                        final Button activate = view.findViewById(R.id.activate);
 
                         String titleText = "" + voucherName + " " + dealName + " @ " + venueName;
 
                         voucherTitle.setText(titleText);
 
-                        if(nowMilli > timeInMilliseconds){
-                            timeTillEnd.setText("VOUCHER EXPIRED");
-                            timeTillEnd.setTextColor(Color.RED);
-                        } else {
-                            new CountDownTimer(diff, 1000) {
-                                public void onTick(long millisUntilFinished) {
-                                timeTillEnd.setText("VOUCHER EXPIRES IN: \n" + (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished))) + ":"
-                                            + (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished))) + ":"
-                                            + (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "");
-                                }
+                        c = new CountDownTimer(diff, 1000) {
+                            public void onTick(long millisUntilFinished) {
+                            timeTillEnd.setText("VOUCHER EXPIRES IN: \n" + (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished))) + ":"
+                                        + (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished))) + ":"
+                                        + (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "");
+                            }
 
-                                public void onFinish() {
+                            public void onFinish() {
 
-                                }
-                            }.start();
-                        }
+                            }
+                        };
+                        c.start();
 
                         try{
                             Bitmap bitmap = TextToImageEncode(venueWebsite);
@@ -177,6 +197,98 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
                             @Override
                             public void onClick(View view) {
                                 new DoNullifyVoucher(context, voucherID, userID, PD).execute();
+                            }
+                        });
+
+                        if(used == 1){
+                            c.cancel();
+                            timeTillEnd.setText("VOUCHER ACTIVE\nGet your order in 15 minutes.");
+
+
+                            new CountDownTimer((difference * 1000), 1000) {
+                                public void onTick(long millisUntilFinished) {
+                                    activate.setText("USE WITHIN: \n" + (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished))) + ":"
+                                            + (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished))) + ":"
+                                            + (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "");
+                                }
+
+                                public void onFinish() {
+                                    Intent intent = new Intent(context, MainMapActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+                                    context.startActivity(intent);
+                                    ((Activity)context).finish();
+                                }
+                            }.start();
+                        }
+
+                        activate.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+                                final String activeDate = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+                                long dif = 0;
+                                try {
+                                    Date now = sdf2.parse(activeDate);
+                                    final long n = now.getTime();
+                                    final long nq = n + 900000;
+                                    dif = nq - n;
+                                } catch (ParseException e){
+                                    e.printStackTrace();
+                                }
+
+                                LocationManager locationManager = (LocationManager) context.getSystemService(LOCATION_SERVICE);
+                                Criteria criteria = new Criteria();
+                                String provider = locationManager.getBestProvider(criteria, true);
+                                try {
+                                    Location location = locationManager.getLastKnownLocation(provider);
+                                    if (location != null) {
+                                        double latitude = location.getLatitude();
+                                        double longitude = location.getLongitude();
+                                        LatLng latLng = new LatLng(latitude, longitude);
+                                        LatLng myPosition = new LatLng(latitude, longitude);
+
+                                        float[] results = new float[1];
+                                        Location.distanceBetween(vlat, vlong,
+                                                myPosition.latitude, myPosition.longitude, results);
+
+                                        Log.i("DISTANCE", "RES: " + results.toString());
+                                        if(results[0] < 100){
+
+                                            c.cancel();
+                                            timeTillEnd.setText("VOUCHER ACTIVE\nGet your order in 15 minutes.");
+
+
+                                            new CountDownTimer(dif, 1000) {
+                                                public void onTick(long millisUntilFinished) {
+                                                    activate.setText("USE WITHIN: \n" + (TimeUnit.MILLISECONDS.toHours(millisUntilFinished) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millisUntilFinished))) + ":"
+                                                            + (TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millisUntilFinished))) + ":"
+                                                            + (TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished))) + "");
+                                                }
+
+                                                public void onFinish() {
+                                                    Intent intent = new Intent(context, MainMapActivity.class);
+                                                    intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+                                                    context.startActivity(intent);
+                                                    ((Activity)context).finish();
+                                                }
+                                            }.start();
+
+                                            new DoActivateVoucher(context, userID, voucherID, redeemed, activate, activeDate).execute();
+                                        } else {
+                                            Toast.makeText(context,
+                                                    "It does not look like you are at the venue. Activate the voucher when you are there.",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                } catch (SecurityException e) {
+                                    Toast.makeText(context,
+                                            "Location permissions not accepted.",
+                                            Toast.LENGTH_LONG).show();
+                                    Intent intent = new Intent(context, MainMapActivity.class);
+                                    intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
+                                    context.startActivity(intent);
+                                    ((Activity)context).finish();
+                                }
                             }
                         });
 

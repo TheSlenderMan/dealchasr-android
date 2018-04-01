@@ -468,9 +468,13 @@ public class MainMapActivity extends AppCompatActivity implements OnMapReadyCall
     @Override
     public void onInfoWindowClick(final Marker marker){
         Integer venueID = (Integer) marker.getTag();
+        Double vlat = marker.getPosition().latitude;
+        Double vlong = marker.getPosition().longitude;
 
         Intent intent = new Intent(MainMapActivity.this, VenueFragment.class);
         intent.putExtra("VID", (Integer) venueID);
+        intent.putExtra("vlat", (Double) vlat);
+        intent.putExtra("vlong", (Double) vlong);
         intent.addFlags(Intent.FLAG_ACTIVITY_PREVIOUS_IS_TOP);
         MainMapActivity.this.startActivity(intent);
         ((Activity)MainMapActivity.this).finish();

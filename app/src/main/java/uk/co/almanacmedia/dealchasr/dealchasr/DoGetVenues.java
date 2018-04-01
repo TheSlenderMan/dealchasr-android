@@ -154,7 +154,7 @@ public class DoGetVenues extends AsyncTask<Void, Void, String> {
                                 .position(new LatLng(location.getLatitude(), location.getLongitude())));
                                 thisMarker.setTag(venueID);
                                 thisMarker.setTitle(venueName);
-                                String snip = (vcount + dcount) + " Voucher(s) >";
+                                String snip = "GO >";
                                 thisMarker.setSnippet(snip);
 
                                 if((vcount > 0 || dcount > 0) && tier == 3){

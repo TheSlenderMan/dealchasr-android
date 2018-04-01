@@ -78,11 +78,11 @@
         android:layout_marginStart="29dp"
         android:layout_marginTop="18dp"
         android:fontFamily="sans-serif-condensed"
+        android:maxLines="5"
         android:textAlignment="center"
-        android:textColor="@android:color/holo_orange_dark"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:maxLines="5"
         app:layout_constraintBottom_toTopOf="@+id/timeTillEnd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -90,17 +90,16 @@
 
     <ImageView
         android:id="@+id/codeHolder"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginBottom="31dp"
-        android:layout_marginEnd="117dp"
-        android:layout_marginStart="117dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/voucherVID"
+        android:layout_width="72dp"
+        android:layout_height="69dp"
+        android:layout_marginBottom="7dp"
+        android:layout_marginEnd="156dp"
+        android:layout_marginStart="156dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/activate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeTillEnd"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/timeTillEnd" />
 
     <Button
         android:id="@+id/cmi"
@@ -114,6 +113,24 @@
         android:textColor="@color/colorAccent"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/voucherVID"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/codeHolder"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/activate"
+        android:layout_width="356dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:layout_marginEnd="14dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="8dp"
+        android:text="ACTIVATE"
+        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/cmi"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/codeHolder" />

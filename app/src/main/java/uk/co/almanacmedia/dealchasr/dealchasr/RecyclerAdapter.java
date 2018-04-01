@@ -36,13 +36,19 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 import static android.view.View.INVISIBLE;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+
     ArrayList<RecyclerModel> list;
     Context context;
     public PopupWindow mPopupWindow;
+    private Double vlat;
+    private Double vlong;
     public static final String PREFS_NAME = "DealSpotr.Data";
-    RecyclerAdapter(Context context, ArrayList<RecyclerModel> list) {
+
+    RecyclerAdapter(Context context, ArrayList<RecyclerModel> list, Double vlat, Double vlong) {
         this.list = list;
         this.context = context;
+        this.vlat = vlat;
+        this.vlong = vlong;
     }
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -123,7 +129,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     termsText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://dealchasr.co.uk/terms"));
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://dealchasr.co.uk/terms-and-conditions"));
                             context.startActivity(browserIntent);
                         }
                     });
@@ -132,7 +138,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     redeemNow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            new DoRedeemVoucher(context, ID, userID, mPopupWindow, view, holder, venueID).execute();
+                            new DoRedeemVoucher(context, ID, userID, mPopupWindow, view, holder, venueID, vlat, vlong).execute();
                         }
                     });
 

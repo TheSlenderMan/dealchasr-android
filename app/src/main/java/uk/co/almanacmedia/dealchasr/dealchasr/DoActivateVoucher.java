@@ -1,21 +1,34 @@
 package uk.co.almanacmedia.dealchasr.dealchasr;
 
+import android.*;
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.PopupWindow;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,67 +38,62 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import uk.co.almanacmedia.dealchasr.dealchasr.R;
+
+import static android.content.Context.LOCATION_SERVICE;
+import static uk.co.almanacmedia.dealchasr.dealchasr.MainMapActivity.MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
 /**
  * Created by Sam on 21/02/2018.
  */
 
-public class DoRedeemVoucher extends AsyncTask<Void, Void, String> {
+public class DoActivateVoucher extends AsyncTask<Void, Void, String> {
 
-    private Exception exception;
-    private String API_URL = "http://api.almanacmedia.co.uk/vouchers/redeem";
-    private String authKey = "DS1k1Il68_uPPoD:3";
-    public  Context context;
-    private Integer dealID;
     private Integer userID;
-    private ProgressDialog PD;
-    private PopupWindow pop;
-    private Integer venueID;
-    private PopupWindow donePop;
-    private PopupWindow errorPop;
-    private Double vlat;
-    private Double vlong;
-    private View v;
-    private RecyclerAdapter.ViewHolder holder;
+    private Integer voucherID;
+    private Context context;
+    private String redeemed;
+    private Exception exception;
+    private Button activate;
+    private String activeDate;
+    private String API_URL = "http://api.almanacmedia.co.uk/vouchers/use";
+    private String authKey = "DS1k1Il68_uPPoD:3";
     public static final String PREFS_NAME = "DealSpotr.Data";
 
-    public DoRedeemVoucher(Context context, Integer dealID, Integer userID, PopupWindow pop, View view, RecyclerAdapter.ViewHolder holder,
-                           Integer venueID, Double vlat, Double vlong){
+    public DoActivateVoucher(Context context, Integer userID, Integer voucherID, String redeemed, Button activate, String activeDate){
         this.context = context;
-        this.dealID = dealID;
         this.userID = userID;
-        this.pop = pop;
-        this.v = view;
-        this.holder = holder;
-        this.venueID = venueID;
-        this.vlat = vlat;
-        this.vlong = vlong;
+        this.voucherID = voucherID;
+        this.redeemed = redeemed;
+        this.activate = activate;
+        this.activeDate = activeDate;
     }
 
     protected void onPreExecute(){
-        this.PD = new ProgressDialog(this.context, R.style.CustomDialog);
-        this.PD.setMessage("Getting your Voucher...");
-        this.PD.setCancelable(false);
-        this.PD.show();
+
     }
 
     protected String doInBackground(Void... urls){
         try {
 
+            String postParameters = "userID=" + userID + "&voucherID=" + voucherID + "&activeDate=" + URLEncoder.encode(activeDate, "utf-8");
+            Log.i("AURL", postParameters);
             final SharedPreferences settings = context.getSharedPreferences(PREFS_NAME, 0);
             final String token = settings.getString("apitoken", PREFS_NAME);
             final String usertoken = settings.getString("usertoken", PREFS_NAME);
             final Integer userid = settings.getInt("userID", 0);
 
-            String postParameters = "userID=" + userID + "&voucherID=" + dealID + "&vlat=" + vlat + "&vlong=" + vlong;
-
             URL url = new URL(API_URL);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setRequestProperty("Authorization", authKey);
-            urlConnection.setDoOutput(true);
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type",
                     "application/x-www-form-urlencoded");
@@ -132,47 +140,15 @@ public class DoRedeemVoucher extends AsyncTask<Void, Void, String> {
                 Log.e("JSON: ", e.getMessage(), e);
             }
         }
-        this.PD.dismiss();
     }
 
-    private void parseDeviceJSON(JSONObject json){
+    public void parseDeviceJSON(JSONObject json){
         if(json != null){
             try {
 
-                JSONObject data = json.getJSONObject("data");
-
-                pop.dismiss();
-
-                if(data.getInt("created") == 1) {
-                    Intent intentv = new Intent(context, ViewVoucherActivity.class);
-                    intentv.putExtra("userID", (Integer) userID);
-                    intentv.putExtra("voucherID", (Integer) dealID);
-                    intentv.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intentv,
-                            PendingIntent.FLAG_ONE_SHOT);
-
-                    Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    Notification.Builder notificationBuilder = new Notification.Builder(context)
-                            .setSmallIcon(R.drawable.dealspotrlogo)
-                            .setContentTitle("New Voucher Redeemed")
-                            .setContentText("View your voucher now!")
-                            .setAutoCancel(true)
-                            .setSound(defaultSoundUri)
-                            .setContentIntent(pendingIntent)
-                            .setColor(Color.parseColor("#F9A603"));
-
-                    NotificationManager notificationManager =
-                            (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                    notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-
-                    Intent intent = new Intent(context, ViewVoucherActivity.class);
-                    intent.putExtra("userID", (Integer) userID);
-                    intent.putExtra("voucherID", (Integer) dealID);
-                    context.startActivity(intent);
-                    ((Activity)context).finish();
-                } else {
-
+                if(json.getBoolean("used")){
+                    activate.setText("ACTIVATED");
+                    activate.setEnabled(false);
                 }
 
             } catch (JSONException e) {

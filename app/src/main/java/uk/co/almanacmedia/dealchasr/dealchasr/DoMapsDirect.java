@@ -120,7 +120,7 @@ public class DoMapsDirect extends AsyncTask<Void, Void, String> {
                     .position(new LatLng(lat, lng)));
             thisMarker.setTag(VID);
             thisMarker.setTitle(this.name);
-            String snip = (vcount + dcount) + " Voucher(s) >";
+            String snip = "GO >";
             thisMarker.setSnippet(snip);
 
             BitmapDrawable bitmapDraw;

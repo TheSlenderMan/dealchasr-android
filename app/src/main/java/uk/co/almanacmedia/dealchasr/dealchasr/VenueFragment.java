@@ -17,6 +17,8 @@ public class VenueFragment extends Activity {
 
     private Integer VID;
     private RecyclerView recyclerView;
+    private Double vlat;
+    private Double vlong;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,9 +30,12 @@ public class VenueFragment extends Activity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         this.VID = getIntent().getIntExtra("VID", 0);
+        this.vlat = getIntent().getDoubleExtra("vlat", 0);
+        this.vlong = getIntent().getDoubleExtra("vlong", 0);
+
         overridePendingTransition(R.anim.slide_in, R.anim.empty);
 
-        new DoGetVenue(VenueFragment.this, this.VID, findViewById(android.R.id.content), recyclerView).execute();
+        new DoGetVenue(VenueFragment.this, this.VID, findViewById(android.R.id.content), recyclerView, vlat, vlong).execute();
     }
 
     @Override

@@ -244,15 +244,23 @@ public class DoGetVoucher extends AsyncTask<Void, Void, String> {
                                     if (location != null) {
                                         double latitude = location.getLatitude();
                                         double longitude = location.getLongitude();
-                                        LatLng latLng = new LatLng(latitude, longitude);
-                                        LatLng myPosition = new LatLng(latitude, longitude);
+                                        //LatLng latLng = new LatLng(latitude, longitude);
+                                        //LatLng myPosition = new LatLng(latitude, longitude);
 
-                                        float[] results = new float[1];
+                                        /*float[] results = new float[1];
                                         Location.distanceBetween(vlat, vlong,
-                                                myPosition.latitude, myPosition.longitude, results);
+                                                myPosition.latitude, myPosition.longitude, results);*/
 
-                                        Log.i("DISTANCE", "RES: " + results.toString());
-                                        if(results[0] < 100){
+                                        Location selected_location = new Location("locationA");
+                                        selected_location.setLatitude(latitude);
+                                        selected_location.setLongitude(longitude);
+                                        Location near_locations = new Location("locationB");
+                                        near_locations.setLatitude(vlat);
+                                        near_locations.setLongitude(vlong);
+                                        double distance = selected_location.distanceTo(near_locations);
+
+                                        Log.i("DISTANCE", "RES: " + distance);
+                                        if(distance < 100){
 
                                             c.cancel();
                                             timeTillEnd.setText("VOUCHER ACTIVE\nGet your order in 15 minutes.");

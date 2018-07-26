@@ -7,7 +7,7 @@
     <string name="slide_text_one">WELCOME TO DEALSCHASR!\n\nFIND REAL TIME VOUCHERS AND DEALS AT YOUR LOCAL PUBS, BARS AND VENUES</string>
     <string name="slide_text_two">LOOK ON THE MAP FOR YOUR FAVOURITE VENUES OR EVEN LOOK FOR SOMETHING NEW</string>
     <string name="slide_text_three">CHOSEN YOUR VENUE AND THEY HAVE A VOUCHER? REDEEM IT THERE AND THEN</string>
-    <string name="slide_text_four">GET TO THE VENUE BEFORE YOUR VOUCHER EXPIRES, SHOW THE VOUCHER AND ENJOY YOUR DEAL!</string>
+    <string name="slide_text_four">GET TO THE VENUE AND ACTIVATE YOUR VOUCHER BEFORE IT EXPIRES. PRESENT IT WHEN YOU ORDER AND ENJOY YOUR DEAL!</string>
     <string name="slide_text_five">NOW YOU ARE READY TO CHASE SOME DEALS!</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
 
